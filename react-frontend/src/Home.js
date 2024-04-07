@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useAuth } from "./context/AuthProvider";
 
+import WebsiteAPI from "./WebsiteAPI";
+
 export const Home = () => {
   const { value } = useAuth();
   const [username, setUsername] = useState("");
@@ -15,16 +17,21 @@ export const Home = () => {
     setPassword(event.target.value);
   };
 
-  const handleLogin = () => {
-    if (username === "bj" && password === "pass424") {
-      // Implement your login logic here
+  const handleLogin = async () => {
+    try {
       console.log("Username:", username);
       console.log("Password:", password);
-      value.onLogin();
-      setError("");
-    } else {
-      // Handle incorrect username or password
-      setError("Incorrect username or password");
+      const loginResult = await WebsiteAPI.login(username, password);
+      if (loginResult) {
+        console.log("Username:", username);
+        console.log("Password:", password);
+        value.onLogin();
+        setError("");
+      } else {
+        setError("Incorrect username or password");
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 

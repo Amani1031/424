@@ -2,6 +2,8 @@ import { createContext, useContext, useState } from "react";
 import { fakeAuth } from "../utils/FakeAuth";
 import { useNavigate } from "react-router-dom";
 
+import axios from 'axios';
+
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
