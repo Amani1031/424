@@ -35,6 +35,38 @@ app.post("/api/login", (req, res) => {
     }
 });
 
+app.post("/api/register", (req, res) => {
+    const { username, password } = req.body;
+
+    // Check if password has at least one special character
+    const hasSpecialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(password);
+
+    if (!hasSpecialCharacter) {
+        return res.status(400).json({ error: "Must contain at least one special character" });
+    }
+
+    // Check if username already exists
+    if (users.some(user => user.username === username)) {
+        return res.status(400).json({ error: "Username already exists" });
+    }
+
+    // Add new user to the users array
+    const newUser = { id: users.length + 1, username, password };
+    users.push(newUser);
+
+    res.status(201).json({ message: "User registered successfully", user: newUser });
+});
+
+app.get("/api/users", (req, res) => {
+    res.json(users);
+});
+
+app.get("/api/users/:username", (req, res) => {
+    const { username } = req.params;
+    const matchedUsers = users.filter(user => user.username === username);
+    res.json(matchedUsers);
+});
+
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });  

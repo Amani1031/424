@@ -21,6 +21,28 @@ const {
       }
       return false;
     }
+
+    static async register(username, password) {
+      try {
+        const response = await axios.post('http://localhost:8000/api/register', {
+            username: username,
+            password: password
+        });
+
+        // Check the status code and handle the response accordingly
+        if (response.status === 201) {
+            console.log('User registered successfully');
+            console.log('New user:', response.data.user);
+            return true;
+        } else {
+            console.log('Registration failed:', response.data.error);
+            return false;
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+      return false;
+    };
 }
 
 export default WebsiteAPI;
