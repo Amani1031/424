@@ -48,6 +48,15 @@ export const Register = () => {
     }
   };
 
+  if (value.token) {
+    return (
+      <>
+        <h2>You are already logged in.</h2>
+        {error && <div>{error}</div>}
+      </>
+    );
+  }
+
   return (
     <>
       <h2>Register Here! (Public)</h2>

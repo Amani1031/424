@@ -14,7 +14,6 @@ import { AuthProvider } from "./context/AuthProvider";
 export const AuthContext = React.createContext(null);
 
 const App = () => {
-  const [token, setToken] = React.useState(null);
   
   return (
     <>
@@ -42,6 +41,7 @@ const App = () => {
 
 const Navigation = () => {
   const { value } = useAuth();
+
   return (
     <nav>
     <NavLink to="/home">Home</NavLink>
