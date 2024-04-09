@@ -1,4 +1,4 @@
-const db = require("/WebsiteDB");
+const db = require("./WebsiteDB");
 
 async function login(req, res) {
     const { username, password } = req.body;
@@ -21,7 +21,7 @@ async function register(req, res) {
     }
 
     try {
-        await registerNewUserAccount("username", "password");
+        await db.registerNewUserAccount("username", "password");
         console.log("Account created successfully");
     } catch(error) {
         console.error("Account creation failed:", error.message);

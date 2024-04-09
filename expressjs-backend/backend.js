@@ -8,6 +8,8 @@ app.use(cors());
 
 const system = require("./systemFuncs");
 
+const config = require("./config");
+
 const {
     api: { host, port },
 } = config;

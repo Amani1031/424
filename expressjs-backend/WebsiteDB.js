@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 
 const UserAccountSchema = require("./UserAccountSchema");
 
-const config = require("/config");
+const config = require("./config");
 
 const {
   database: { host, name, username, password },
@@ -27,6 +26,9 @@ async function registerNewUserAccount(
     password
   ) {
     const conn = getDatabaseConnection();
+    if (!conn) {
+        throw new Error("Database connection is not established");
+    }
     const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
     let account = new UserAccountModel({
       username: username,
