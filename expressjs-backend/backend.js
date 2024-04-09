@@ -6,15 +6,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const config = {
-    api: {
-        host: "http://localhost:8000",
-        port: 8000,
-        name: "WebsiteAPI",
-      },
-};
-
-const { host, port } = config.api;
+const {
+    api: { host, port },
+  } = config;
 
 // Temporary user data
 const users = [
@@ -70,3 +64,8 @@ app.get("/api/users/:username", (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });  
+
+
+// mongodb+srv://websiteAdmin:IGZEprq2QgSK3Zn9@website.rqsjqlu.mongodb.net/?retryWrites=true&w=majority&appName=Website
+
+// mongodb+srv://websiteAdmin:<password>@website.rqsjqlu.mongodb.net/
