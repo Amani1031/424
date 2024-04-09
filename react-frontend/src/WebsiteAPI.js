@@ -24,7 +24,7 @@ const {
 
     static async register(username, password) {
       try {
-        const response = await axios.post('http://localhost:8000/api/register', {
+        const response = await axios.post(`${HOME_URL}/api/register/`, {
             username: username,
             password: password
         });
