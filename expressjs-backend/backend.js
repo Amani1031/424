@@ -6,65 +6,28 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+const logReg = require("./login-register");
+
 const {
     api: { host, port },
-  } = config;
+} = config;
 
-// Temporary user data
-const users = [
-    { id: 1, username: 'bj', password: 'pass424' }
-];
+app.post("/api/login", logReg.login);
 
-app.get('/', (req, res) => {
-    res.send('Wooh');
-});
+app.post("/api/register", logReg.register);
 
-app.post("/api/login", (req, res) => {
-    const { username, password } = req.body;
-    const user = users.find(user => user.username === username && user.password === password);
-    if (user) {
-        res.send(true);
-    } else {
-        res.send(false);
-    }
-});
+app.get("/api/users", logReg.get_all_users);
 
-app.post("/api/register", (req, res) => {
-    const { username, password } = req.body;
-
-    // Check if password has at least one special character
-    const hasSpecialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(password);
-
-    if (!hasSpecialCharacter) {
-        return res.status(400).json({ error: "Must contain at least one special character" });
-    }
-
-    // Check if username already exists
-    if (users.some(user => user.username === username)) {
-        return res.status(400).json({ error: "Username already exists" });
-    }
-
-    // Add new user to the users array
-    const newUser = { id: users.length + 1, username, password };
-    users.push(newUser);
-
-    res.status(201).json({ message: "User registered successfully", user: newUser });
-});
-
-app.get("/api/users", (req, res) => {
-    res.json(users);
-});
-
-app.get("/api/users/:username", (req, res) => {
-    const { username } = req.params;
-    const matchedUsers = users.filter(user => user.username === username);
-    res.json(matchedUsers);
-});
+app.get("/api/users/:username", logReg.get_single_user);
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });  
 
+
+
+
+// MONGODB CONNECTION STRINGS:
 
 // mongodb+srv://websiteAdmin:IGZEprq2QgSK3Zn9@website.rqsjqlu.mongodb.net/?retryWrites=true&w=majority&appName=Website
 

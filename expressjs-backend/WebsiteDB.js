@@ -23,14 +23,12 @@ function getDatabaseConnection() {
 }
 
 async function registerNewUserAccount(
-    id,
     username,
     password
   ) {
     const conn = getDatabaseConnection();
     const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
     let account = new UserAccountModel({
-      id: id,
       username: username,
       password: password,
     });
@@ -43,10 +41,12 @@ async function registerNewUserAccount(
       } already exists!`;
       throw new Error(error_message);
     }
-    return account.username;
 }
 
-async function getUserAccFromUsername(username) {
+async function getUserAccFromUsernamePwd(
+    username,
+    password
+  ) {
     const conn = getDatabaseConnection();
     const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
     if (!username) {
@@ -54,6 +54,7 @@ async function getUserAccFromUsername(username) {
     }
     let acc = await UserAccountModel.findOne({
       username: username,
+      password: password
     });
     return acc;
 }
@@ -62,5 +63,5 @@ module.exports = {
     getDatabaseConnection,
     setDatabaseConnection,
     registerNewUserAccount,
-    getUserAccFromUsername,
+    getUserAccFromUsernamePwd,
   };
