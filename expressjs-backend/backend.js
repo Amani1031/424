@@ -14,6 +14,8 @@ const {
     api: { host, port },
 } = config;
 
+db.startDatabaseConnection();
+
 app.post("/api/login", system.login);
 
 app.post("/api/register", system.register);
@@ -21,6 +23,12 @@ app.post("/api/register", system.register);
 app.get("/api/users", system.get_all_users);
 
 app.get("/api/users/:username", system.get_single_user);
+
+process.on("SIGINT", async () => {
+    await db.closeDatabaseConnection();
+    console.log("MongoDB connection closed");
+    process.exit();
+});
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

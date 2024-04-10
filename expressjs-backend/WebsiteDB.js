@@ -13,13 +13,34 @@ const DATABASE_URL = `mongodb+srv://${username}:${password}@${host}/?retryWrites
 
 let dbConnection = null;
 
+function startDatabaseConnection() {
+    mongoose.connect(DATABASE_URL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    }).then(() => {
+        console.log("MongoDB connected");
+        setDatabaseConnection(mongoose.connection);
+    }).catch((error) => {
+        console.error("MongoDB connection failed:", error);
+    });
+}
+
 function setDatabaseConnection(connection) {
-  dbConnection = connection;
+    dbConnection = connection;
 }
 
 function getDatabaseConnection() {
   return dbConnection;
 }
+
+function closeDatabaseConnection() {
+    mongoose.disconnect().then(() => {
+        console.log("MongoDB disconnected");
+    }).catch((error) => {
+        console.error("Error disconnecting MongoDB:", error);
+    });
+}
+
 
 async function registerNewUserAccount(
     username,
@@ -62,8 +83,10 @@ async function getUserAccFromUsernamePwd(
 }
 
 module.exports = {
-    getDatabaseConnection,
+    startDatabaseConnection,
     setDatabaseConnection,
+    getDatabaseConnection,
+    closeDatabaseConnection,
     registerNewUserAccount,
     getUserAccFromUsernamePwd,
   };
