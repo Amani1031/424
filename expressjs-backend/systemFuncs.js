@@ -2,7 +2,7 @@ const db = require("./WebsiteDB");
 
 async function login(req, res) {
     const { username, password } = req.body;
-    const user = db.getUserAccFromUsernamePwd(username);
+    const user = await db.getUserAccFromUsernamePwd(username, password);
     if (user) {
         res.send(true);
     } else {
@@ -32,18 +32,19 @@ async function register(req, res) {
 
 async function get_all_users(req, res) {
     try {
-      const users = await UserModel.find();
+      users = await db.displayAllUsers();
+      console.log("Displaying users now.");
       res.json(users);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Server error" });
+      console.error("Error fetching users:", error);
+      res.status(500).json({ error: "Failed to fetch users" });
     }
 }
 
 async function get_single_user(req, res) {
     const { username } = req.params;
     try {
-      const user = await UserModel.findOne({ username });
+      const user = await db.displaySingleUser(username);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }

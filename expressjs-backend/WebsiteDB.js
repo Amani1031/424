@@ -66,18 +66,45 @@ async function registerNewUserAccount(
     }
 }
 
+async function displayAllUsers() {
+    const conn = getDatabaseConnection();
+    if (!conn) {
+        throw new Error("Database connection is not established");
+    }
+    try {
+        const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
+        const users = await UserAccountModel.find();
+        return users;
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        throw new Error("Failed to fetch users");
+    }
+}
+
 async function getUserAccFromUsernamePwd(
     username,
     password
   ) {
     const conn = getDatabaseConnection();
-    const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
-    if (!username) {
-      throw new Error("Username needed");
+    if (!conn) {
+        throw new Error("Database connection is not established");
     }
+    const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
     let acc = await UserAccountModel.findOne({
       username: username,
       password: password
+    });
+    return !!acc;
+}
+
+async function displaySingleUser(username) {
+    const conn = getDatabaseConnection();
+    if (!conn) {
+        throw new Error("Database connection is not established");
+    }
+    const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
+    let acc = await UserAccountModel.findOne({
+      username: username
     });
     return acc;
 }
@@ -88,5 +115,7 @@ module.exports = {
     getDatabaseConnection,
     closeDatabaseConnection,
     registerNewUserAccount,
+    displayAllUsers,
     getUserAccFromUsernamePwd,
+    displaySingleUser
   };
