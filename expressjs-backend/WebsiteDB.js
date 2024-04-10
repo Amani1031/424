@@ -41,7 +41,6 @@ function closeDatabaseConnection() {
     });
 }
 
-
 async function registerNewUserAccount(
     username,
     password
@@ -57,6 +56,7 @@ async function registerNewUserAccount(
     });
     try {
       await account.save();
+      return account.username;
     } catch (err) {
       const error_message_field = err.message.split("{")[1].split(" ")[1];
       const error_message = `${
