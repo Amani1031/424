@@ -2,14 +2,12 @@ const mongoose = require("mongoose");
 
 const UserAccountSchema = require("./UserAccountSchema");
 
-const config = require("./config");
+const dotenv = require("dotenv");
 
-const {
-  database: { host, name, username, password },
-} = config;
+dotenv.config()
 
-const DATABASE_NAME = name;
-const DATABASE_URL = `mongodb+srv://${username}:${password}@${host}/?retryWrites=true&w=majority&appName=${DATABASE_NAME}`;
+const DATABASE_NAME = process.env.NAME;
+const DATABASE_URL = `mongodb+srv://${process.env.USERNAME}:${process.env.PASSWORD}@${process.env.HOST}/?retryWrites=true&w=majority&appName=${DATABASE_NAME}`;
 
 let dbConnection = null;
 
