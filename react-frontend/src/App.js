@@ -1,7 +1,7 @@
 
 import { ProtectedRoute } from "./utils/ProtectedRoute";
 import { fakeAuth } from "./utils/FakeAuth";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 import { Home } from "./Home";
 import { Landing } from "./Landing";
@@ -10,6 +10,7 @@ import { NavLink } from "react-router-dom";
 
 import { useAuth } from "./context/AuthProvider";
 import { AuthProvider } from "./context/AuthProvider";
+import WebsiteAPI from "./WebsiteAPI";
 
 export const AuthContext = React.createContext(null);
 
@@ -41,6 +42,7 @@ const App = () => {
 
 const Navigation = () => {
   const { value } = useAuth();
+  WebsiteAPI.validateUser(value);
 
   return (
     <nav>

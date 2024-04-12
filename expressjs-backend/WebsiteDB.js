@@ -95,7 +95,7 @@ async function getUserAccFromUsernamePwd(
     return !!acc;
 }
 
-async function displaySingleUser(username) {
+async function findSingleUser(username) {
     const conn = getDatabaseConnection();
     if (!conn) {
         throw new Error("Database connection is not established");
@@ -115,5 +115,5 @@ module.exports = {
     registerNewUserAccount,
     displayAllUsers,
     getUserAccFromUsernamePwd,
-    displaySingleUser
+    findSingleUser
   };

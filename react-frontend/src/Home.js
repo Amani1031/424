@@ -22,13 +22,19 @@ export const Home = () => {
       console.log("Username:", username);
       console.log("Password:", password);
       const loginResult = await WebsiteAPI.login(username, password);
-      if (loginResult) {
+      if (loginResult && typeof loginResult === "object" && loginResult.token && loginResult.username) {
+        const { token, username } = loginResult;
         console.log("Username:", username);
-        console.log("Password:", password);
-        value.onLogin();
+        console.log("Token:", token);
+        value.onLogin(loginResult.username);
+        document.cookie = `token=${token}`
         setError("");
-      } else {
+      } else if (loginResult === false) {
         setError("Incorrect username or password");
+      } else {
+        // Handle unexpected response
+        console.log(loginResult);
+        setError("Unexpected response from server");
       }
     } catch (err) {
       console.error(err);

@@ -30,12 +30,12 @@ export const Register = () => {
     }
 
     try {
-      // Call your API endpoint to register the user
       const response = await WebsiteAPI.register(username, password);
-      // Handle the response
-      if (response) {
+      if (response.status === 201) {
         // Registration successful
-        value.onLogin();
+        const { token, username } = response.data;
+        value.onLogin(username);
+        document.cookie = `token=${token}`
         setError("");
       } else {
         // Registration failed

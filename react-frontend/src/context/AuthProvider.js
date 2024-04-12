@@ -8,9 +8,8 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const [token, setToken] = useState(null);
 
-  const handleLogin = async () => {
-    const token = await fakeAuth();
-    setToken(token);
+  const handleLogin = async (username) => {
+    setToken(username);
     navigate("/landing");
   };
 
