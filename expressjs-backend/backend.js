@@ -6,7 +6,10 @@ const cookieParser = require('cookie-parser');
 
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // Replace with your frontend URL
+    credentials: true // Allow cookies to be sent
+}));
 app.use(cookieParser());
 
 

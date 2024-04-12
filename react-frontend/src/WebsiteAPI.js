@@ -45,8 +45,16 @@ const HOME_URL = host;
     };
 
     static async validateUser(value) {
+      const token = document.cookie.split(';')
+                    .map(cookie => cookie.trim())
+                    .find(cookie => cookie.startsWith('token='))
+                    ?.split('=')[1];
+      if (!token) {
+        console.log("token null");
+        return null; // Return null if token is null
+      }
       try {
-        const response = await axios.post(`${HOME_URL}/api/authenticate/`);
+        const response = await axios.post(`${HOME_URL}/api/authenticate/`, {token: token});
 
         // Check the status code and handle the response accordingly
         if (response.status === 201) {

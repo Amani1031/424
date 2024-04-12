@@ -42,7 +42,10 @@ const App = () => {
 
 const Navigation = () => {
   const { value } = useAuth();
-  WebsiteAPI.validateUser(value);
+  
+  useEffect(() => {
+    WebsiteAPI.validateUser(value);
+  }, []);
 
   return (
     <nav>

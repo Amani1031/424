@@ -10,7 +10,7 @@ async function login(req, res) {
   const user = await db.getUserAccFromUsernamePwd(username, password);
   if (user) {
       const token = generateAccessToken({ username: username });
-      return res.json({token, username: username});
+      return res.json({token: token, username: username});
   } else {
       return res.send(false);
   }
@@ -38,47 +38,39 @@ async function register(req, res) {
 }
 
 function generateAccessToken(username) {
-  return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+  return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '10000s' });
 }
 
 function authenticateToken(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    return res.status(401).json({
-        status: 'fail',
-        message: 'Unauthorized!',
-      });
-  }
-  const token = authHeader.split(' ')[1];
-  if (token == null) return res.sendStatus(401);
+  const token = req.body.token;
+  if (token == null) return res.sendStatus(401).json({ message: 'Token missing' });
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (err) {
-      console.log("JWT Verify did not work.");
-      console.log(err);
-      return res.sendStatus(401);
-    }
+  console.log(err);
 
-    req.user = user;
-    next();
+  if (err) return res.sendStatus(403);
+
+  req.user = user;
+
+  next();
   });
 }
 
 async function fetchUsername(req, res) {
-  const token = req.cookies.token;
-  const decoded = jwt.decode(token);
 
-  if (decoded) {
-    const { username } = decoded;
-    const user = await db.findSingleUser(username);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+  const user = req.user.username;
+  console.log("User:", user.username);
+
+  if (user) {
+    const userFound = await db.findSingleUser(user);
+    if (!userFound) {
+      return res.status(401).json({ error: "User not found" });
     }
-    console.log('Username:', user.username);
-    return res.status(201).json({username: user.username});
+    console.log('Username:', userFound.username);
+    return res.status(201).json({username: userFound.username});
   } else {
     console.log('Failed to decode token.');
-    return res.status(404).json({ error: "User not found" });
+    return res.status(401).json({ error: "User not found" });
   }
 };
 

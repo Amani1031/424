@@ -19,14 +19,12 @@ export const Home = () => {
 
   const handleLogin = async () => {
     try {
-      console.log("Username:", username);
-      console.log("Password:", password);
       const loginResult = await WebsiteAPI.login(username, password);
-      if (loginResult && typeof loginResult === "object" && loginResult.token && loginResult.username) {
+      if (loginResult && typeof loginResult === "object" && loginResult.token &&loginResult.username) {
         const { token, username } = loginResult;
         console.log("Username:", username);
-        console.log("Token:", token);
-        value.onLogin(loginResult.username);
+        value.onLogin(username);
+        console.log("Token", token);
         document.cookie = `token=${token}`
         setError("");
       } else if (loginResult === false) {
