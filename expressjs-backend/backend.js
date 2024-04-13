@@ -6,6 +6,9 @@ const fs = require("fs");
 const app = express();
 const cookieParser = require('cookie-parser');
 
+const authRouter = require("./routes/oath");
+const requestRouter = require("./routes/request");
+
 
 app.use(express.json());
 app.use(cors());
@@ -47,6 +50,10 @@ app.get("/api/users", system.get_all_users);
 app.post("/api/contacts", system.getContacts);
 
 app.get("/api/users/:username", system.get_single_user);
+
+app.use("/oath", authRouter);
+
+app.use("/request", requestRouter);
 
 process.on("SIGINT", async () => {
     await db.closeDatabaseConnection();
