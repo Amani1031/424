@@ -74,6 +74,19 @@ const HOME_URL = host;
       }
       return;
     };
+
+    static async loadContacts(username) {
+      try {
+        const response = await axios.post(`${HOME_URL}/api/contacts/`, {
+          username: username
+        });
+        console.log(response.data);
+        return response.data;
+      } catch (err) {
+        console.log(err);
+      }
+      return null;
+    }
 }
 
 export default WebsiteAPI;

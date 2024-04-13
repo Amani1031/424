@@ -20,8 +20,6 @@ const App = () => {
     <>
     <AuthProvider>
         <Navigation />
-      
-        <h1>React Router</h1>
 
         <Routes>
           <Route index element={<Home />} />

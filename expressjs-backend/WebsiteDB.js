@@ -4,6 +4,9 @@ const UserAccountSchema = require("./UserAccountSchema");
 
 const dotenv = require("dotenv");
 
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 dotenv.config()
 
 const DATABASE_NAME = process.env.NAME;
@@ -47,10 +50,14 @@ async function registerNewUserAccount(
     if (!conn) {
         throw new Error("Database connection is not established");
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    console.log("hashed pwd,", hashedPassword);
+
     const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
     let account = new UserAccountModel({
       username: username,
-      password: password,
+      password: hashedPassword,
     });
     try {
       await account.save();
@@ -79,6 +86,21 @@ async function displayAllUsers() {
     }
 }
 
+async function fetchAllExceptAuthUser(username) {
+  const conn = getDatabaseConnection();
+  if (!conn) {
+      throw new Error("Database connection is not established");
+  }
+  try {
+      const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
+      const contacts = await UserAccountModel.find({ username: { $ne: username } });
+      return contacts;
+  } catch (error) {
+      console.error("Error fetching contacts:", error);
+      throw new Error("Failed to fetch contacts");
+  }
+}
+
 async function getUserAccFromUsernamePwd(
     username,
     password
@@ -88,11 +110,14 @@ async function getUserAccFromUsernamePwd(
         throw new Error("Database connection is not established");
     }
     const UserAccountModel = conn.model("UserAccount", UserAccountSchema);
-    let acc = await UserAccountModel.findOne({
-      username: username,
-      password: password
-    });
-    return !!acc;
+    let acc = await UserAccountModel.findOne({ username: username });
+
+    if (!acc) {
+        return false; // User not found
+    }
+
+    const match = await bcrypt.compare(password, acc.password);
+    return match ? acc : null;
 }
 
 async function findSingleUser(username) {
@@ -115,5 +140,6 @@ module.exports = {
     registerNewUserAccount,
     displayAllUsers,
     getUserAccFromUsernamePwd,
-    findSingleUser
+    findSingleUser,
+    fetchAllExceptAuthUser
   };

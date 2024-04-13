@@ -85,6 +85,18 @@ async function get_all_users(req, res) {
     }
 }
 
+async function getContacts(req, res) {
+  try {
+    console.log("body uname:", req.body.username)
+    const contacts = await db.fetchAllExceptAuthUser(req.body.username);
+    console.log("Displaying contacts now.");
+    res.json(contacts);
+  } catch (error) {
+    console.error("Error fetching contacts:", error);
+    res.status(500).json({ error: "Failed to fetch contacts" });
+  }
+}
+
 async function get_single_user(req, res) {
     const { username } = req.params;
     try {
@@ -106,4 +118,5 @@ module.exports = {
     get_single_user,
     authenticateToken,
     fetchUsername,
+    getContacts
 };

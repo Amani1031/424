@@ -24,7 +24,6 @@ export const Home = () => {
         const { token, username } = loginResult;
         console.log("Username:", username);
         value.onLogin(username);
-        console.log("Token", token);
         document.cookie = `token=${token}`
         setError("");
       } else if (loginResult === false) {
@@ -41,7 +40,7 @@ export const Home = () => {
 
   return (
     <>
-      <h2>Home (Public)</h2>
+      <h2> Welcome! </h2>
       {error && <div>{error}</div>}
       {!value.token && (
         <>
