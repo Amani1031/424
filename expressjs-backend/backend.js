@@ -20,15 +20,15 @@ const {
     api: { host, port },
 } = config;
 
-// https
-//   .createServer(
-//     {
-//         key: fs.readFileSync("key.pem"),
-//         cert: fs.readFileSync("cert.pem"),
-//     }, app)
-//   .listen(port, ()=>{
-//     console.log('server is runing at port 8000')
-//   });
+https
+  .createServer(
+    {
+        key: fs.readFileSync("key.pem"),
+        cert: fs.readFileSync("cert.pem"),
+    }, app)
+  .listen(port, ()=>{
+    console.log('server is runing at port 8000')
+  });
 
 db.startDatabaseConnection();
 
@@ -54,6 +54,6 @@ process.on("SIGINT", async () => {
     process.exit();
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
-});  
+// app.listen(port, () => {
+//     console.log(`Example app listening at http://localhost:${port}`);
+// });  
