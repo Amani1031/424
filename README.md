@@ -15,9 +15,9 @@ ADDED FEATURES FROM PART 2:
 TO START THE APPLICATION:
 
 One one terminal:
-cd react-frontend 
+cd react-frontend, 
 npm start
 
 On the second terminal:
-cd express-backendjs
+cd express-backendjs, 
 node backend.js
