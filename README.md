@@ -2,6 +2,7 @@ TO CONFIGURE BETWEEN HTTP AND HTTPS:
 
 Within the backend: 
 - Change all mentions of http to https in config.js, oath.js, and request.js
+- Within backend.js, uncomment the https listening function and comment the http app.listening function
 
 Within the frontend:
 - Change all mentions of http to https in config.js
