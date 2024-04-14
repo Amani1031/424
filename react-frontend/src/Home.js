@@ -58,7 +58,7 @@ export const Home = () => {
 
   return (
     <>
-      <h2> Welcome! </h2>
+      <h2> Welcome to Run Club! </h2>
       {error && <div>{error}</div>}
       {!value.token && (
         <>
