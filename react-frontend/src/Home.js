@@ -36,7 +36,6 @@ export const Home = () => {
         setError("Unexpected response from server");
       }
     } catch (err) {
-      console.log("STUCK");
       console.error(err);
     }
   };
@@ -48,9 +47,13 @@ export const Home = () => {
   async function auth(){
     const response = await fetch('http://127.0.0.1:8000/request',{method:'post'});
     const data = await response.json();
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const username = urlParams.get('username');
     console.log(data);
     navigate(data.url);
-  
+    // value.onLogin(username);
+    // document.cookie = `token=${token}`
   }
 
   return (
@@ -76,7 +79,7 @@ export const Home = () => {
               Sign In
             </button>
           )}
-          <button className="btn-auth"  type="button" onClick={()=> auth()}>
+          <button className="btn-auth"  type="button" onClick={()=> auth(value)}>
             <img className="btn-auth-img" src={googleButton} alt='google sign in'/>
             </button>
         </>

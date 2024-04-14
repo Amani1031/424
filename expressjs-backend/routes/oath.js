@@ -1,6 +1,7 @@
 
 
-const sysFuncs = require("../systemFuncs");
+const jwt = require('jsonwebtoken');
+const db = require("../WebsiteDB");
 
 var express = require("express");
 var router = express.Router();
@@ -24,8 +25,13 @@ async function getUserData(access_token) {
   const data = await response.json();
 
   console.log("data", data);
-
+  return data;
 }
+
+function generateAccessToken(username) {
+  return jwt.sign({username: username}, process.env.TOKEN_SECRET, { expiresIn: '10000s' });
+}
+
 
 router.get("/", async function (req, res, next) {
 
@@ -45,13 +51,15 @@ router.get("/", async function (req, res, next) {
     const user = oAuth2Client.credentials;
     // show data that is returned from the Google call
     console.log('credentials', user);
-    await getUserData(oAuth2Client.credentials.access_token);
+    const data = await getUserData(oAuth2Client.credentials.access_token);
 
         
    // call your code to generate a new JWT from your backend, don't reuse Googles
 
-    const token = sysFuncs.generateAccessToken(user.appUser.userid);
-    res.redirect(303, `http://localhost:3000/token=${token}`);
+    const token = generateAccessToken(data.name);
+    console.log('the name is:', data.name);
+    await db.registerNewUserAccount(data.name, "Google", "invalid");
+    res.redirect(303, `http://localhost:3000/?token=${token}&username=${data.name}`);
 
     } catch (err) {
            console.log("Error with signin with Google", err);
