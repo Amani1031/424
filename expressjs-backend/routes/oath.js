@@ -1,8 +1,13 @@
-const express = require("express");
 
-const router = express.Router();
 
+const sysFuncs = require("../systemFuncs");
+
+var express = require("express");
+var router = express.Router();
 const dotenv = require("dotenv");
+
+const fetch = require("node-fetch");
+
 
 dotenv.config();
 
@@ -28,7 +33,7 @@ router.get("/", async function (req, res, next) {
 
   try {
 
-    const redirectUrl = "https://127.0.0.1:8000/oath";
+    const redirectUrl = "http://127.0.0.1:8000/oath";
     const oAuth2Client = new OAuth2Client(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -39,18 +44,20 @@ router.get("/", async function (req, res, next) {
     await oAuth2Client.setCredentials(result.tokens);
     const user = oAuth2Client.credentials;
     // show data that is returned from the Google call
-    await getUserData(user.access_token);
+    console.log('credentials', user);
+    await getUserData(oAuth2Client.credentials.access_token);
 
         
    // call your code to generate a new JWT from your backend, don't reuse Googles
 
-   token = generateJWT(user.appUser.userid);
+    const token = sysFuncs.generateAccessToken(user.appUser.userid);
     res.redirect(303, `http://localhost:3000/token=${token}`);
 
     } catch (err) {
            console.log("Error with signin with Google", err);
            res.redirect(303, "http://localhost:3000/");
-    }
+
+  }
 
 });
 module.exports = router;
