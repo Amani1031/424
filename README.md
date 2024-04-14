@@ -11,3 +11,13 @@ ADDED FEATURES FROM PART 2:
 - Run club details
 - Google OAth
 - Support for phone numbers
+
+TO START THE APPLICATION:
+
+One one terminal:
+cd react-frontend 
+npm start
+
+On the second terminal:
+cd express-backendjs
+node backend.js
