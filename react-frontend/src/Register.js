@@ -7,6 +7,7 @@ export const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [cell, setCell] = useState("");
   const [error, setError] = useState("");
 
   const handleUsernameChange = (event) => {
@@ -21,6 +22,10 @@ export const Register = () => {
     setConfirmPassword(event.target.value);
   };
 
+  const handleCellChange = (event) => {
+    setCell(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -30,7 +35,7 @@ export const Register = () => {
     }
 
     try {
-      const response = await WebsiteAPI.register(username, password);
+      const response = await WebsiteAPI.register(username, password, cell);
       if (response.status === 201) {
         // Registration successful
         const { token, username } = response.data;
@@ -81,6 +86,12 @@ export const Register = () => {
             placeholder="Confirm Password"
             value={confirmPassword}
             onChange={handleConfirmPasswordChange}
+          />
+          <input
+            type="text"
+            placeholder="Cell Phone Number"
+            value={cell}
+            onChange={handleCellChange}
           />
           <button type="submit">Register</button>
         </form>

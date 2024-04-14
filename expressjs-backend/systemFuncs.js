@@ -17,7 +17,7 @@ async function login(req, res) {
 }
 
 async function register(req, res) {
-    const { username, password } = req.body;
+    const { username, password, cell } = req.body;
 
     // Check if password has at least one special character
     const hasSpecialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(password);
@@ -27,7 +27,7 @@ async function register(req, res) {
     }
 
     try {
-        const uname = await db.registerNewUserAccount(username, password);
+        const uname = await db.registerNewUserAccount(username, password, cell);
         console.log("Account created successfully");
         const token = generateAccessToken({ username: uname });
         return res.status(201).json({ message: "User registered successfully", token, username: uname });

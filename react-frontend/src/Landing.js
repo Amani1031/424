@@ -30,6 +30,7 @@ export const Landing = () => {
         {users.map((user) => (
           <li key={user._id}>
             <span>{user.username}</span>
+            <span>{user.cell}</span>
           </li>
         ))}
       </ul>

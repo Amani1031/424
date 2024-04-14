@@ -13,6 +13,11 @@ const UserAccountSchema = mongoose.Schema(
       required: true,
       trim: false,
     },
+    cell: {
+      type: String,
+      required: true,
+      trim: false,
+    },
   },
   { collection: "UserAccount" }
 );

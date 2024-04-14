@@ -22,11 +22,12 @@ const HOME_URL = host;
       return false;
     }
 
-    static async register(username, password) {
+    static async register(username, password, cell) {
       try {
         const response = await axios.post(`${HOME_URL}/api/register/`, {
             username: username,
-            password: password
+            password: password,
+            cell: cell
         });
 
         // Check the status code and handle the response accordingly

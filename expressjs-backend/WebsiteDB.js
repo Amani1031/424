@@ -5,7 +5,6 @@ const UserAccountSchema = require("./UserAccountSchema");
 const dotenv = require("dotenv");
 
 const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 dotenv.config()
 
@@ -44,7 +43,8 @@ function closeDatabaseConnection() {
 
 async function registerNewUserAccount(
     username,
-    password
+    password,
+    phoneNumber
   ) {
     const conn = getDatabaseConnection();
     if (!conn) {
@@ -58,6 +58,7 @@ async function registerNewUserAccount(
     let account = new UserAccountModel({
       username: username,
       password: hashedPassword,
+      cell: phoneNumber,
     });
     try {
       await account.save();
